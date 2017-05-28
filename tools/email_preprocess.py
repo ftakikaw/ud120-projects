@@ -29,6 +29,11 @@ def preprocess(words_file = "../tools/word_data.pkl", authors_file="../tools/ema
 
     ### the words (features) and authors (labels), already largely preprocessed
     ### this preprocessing will be repeated in the text learning mini-project
+    
+### pickle.load
+### authors: int[17578]
+### word_data: string[17578]
+    
     authors_file_handler = open(authors_file, "r")
     authors = pickle.load(authors_file_handler)
     authors_file_handler.close()
@@ -39,11 +44,19 @@ def preprocess(words_file = "../tools/word_data.pkl", authors_file="../tools/ema
 
     ### test_size is the percentage of events assigned to the test set
     ### (remainder go into training)
+    ### cross_validation.train_test_split
+    ###features_train: string[15820]
+    ### features_test: string [1758]
+    ### labels_train: int[15820]
+    ### labels_test: int[1758]
     features_train, features_test, labels_train, labels_test = cross_validation.train_test_split(word_data, authors, test_size=0.1, random_state=42)
 
 
 
     ### text vectorization--go from strings to lists of numbers
+    ### vectorizer.transform
+    ### features_train_transformed: tuple[15820,37851]
+    ### features_test_transformed: tuple[1758,37851]    
     vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.5,
                                  stop_words='english')
     features_train_transformed = vectorizer.fit_transform(features_train)
@@ -53,6 +66,9 @@ def preprocess(words_file = "../tools/word_data.pkl", authors_file="../tools/ema
 
     ### feature selection, because text is super high dimensional and 
     ### can be really computationally chewy as a result
+    ### selector.transform
+    ### features_train_transformed: tuple[15820,3785]
+    ### features_test_transformed: tuple[1758,3785]    
     selector = SelectPercentile(f_classif, percentile=10)
     selector.fit(features_train_transformed, labels_train)
     features_train_transformed = selector.transform(features_train_transformed).toarray()
