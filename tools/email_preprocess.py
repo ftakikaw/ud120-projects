@@ -69,7 +69,7 @@ def preprocess(words_file = "../tools/word_data.pkl", authors_file="../tools/ema
     ### selector.transform
     ### features_train_transformed: tuple[15820,3785]
     ### features_test_transformed: tuple[1758,3785]    
-    #selector = SelectPercentile(f_classif, percentile=0)
+    #selector = SelectPercentile(f_classif, percentile=1)
     selector = SelectPercentile(f_classif, percentile=10)
     
     selector.fit(features_train_transformed, labels_train)
