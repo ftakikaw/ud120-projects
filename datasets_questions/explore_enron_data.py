@@ -16,7 +16,26 @@
 """
 
 import pickle
+import numpy as np
 
 enron_data = pickle.load(open("../final_project/final_project_dataset.pkl", "r"))
 
+number_total = len(enron_data.items())
+number_poi = 0
+number_salario_nan = 0
+number_email_nan = 0
 
+for key, value in enron_data.items():
+    
+    if(value['poi']):
+        number_poi = number_poi + 1
+    if(str(value['salary']) == 'NaN'):
+        number_salario_nan = number_salario_nan + 1
+        
+    if(str(value['email_address']) == 'NaN'):
+        number_email_nan = number_email_nan + 1
+
+print "qde total: ", number_total 
+print "qde poi: ", number_poi
+print "qde salario informado: ", number_total - number_salario_nan
+print "qde email informado: ", number_total - number_email_nan
