@@ -13,8 +13,29 @@ def outlierCleaner(predictions, ages, net_worths):
     
     cleaned_data = []
 
-    ### your code goes here
+    ordered_data = []
 
+    ### your code goes here
+    ordered_data[0] = (ages[0], net_worths[0], abs(predictions[0] - net_worths[0]))
     
+    i = 1
+    
+    while i < len(predictions):
+        
+        error = abs(predictions[i] - net_worths[i])
+        
+        j = 0
+        
+        while j < len(ordered_data):
+            
+            if(ordered_data[j][2] < error):
+                j = j + 1
+                exit
+        
+            j = j + 1
+    
+        ordered_data.insert(j, (ages[i], net_worths[i], error))
+    
+        i = i + 1
     return cleaned_data
 
