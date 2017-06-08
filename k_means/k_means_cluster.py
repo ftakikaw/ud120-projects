@@ -8,7 +8,7 @@
 
 
 import pickle
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 import sys
 sys.path.append("../tools/")
@@ -90,6 +90,17 @@ features_list = [poi, feature_1, feature_2]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
+from sklearn.preprocessing import MinMaxScaler
+
+min_max_scaler = MinMaxScaler()
+
+finance_features_minmax = min_max_scaler.fit_transform(finance_features)
+
+valor_atributos = np.array([[200000.0, 1000000.0]])
+
+valor_atributos_rescaled = min_max_scaler.transform(valor_atributos)
+
+print "salary e exercised_stock_options  rescaled:" , valor_atributos_rescaled
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
