@@ -61,6 +61,12 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             parsed_email = parsed_email.replace("chris", "")
             
             parsed_email = parsed_email.replace("germani", "")
+            
+            #incluido no miniproject da licao 12
+            parsed_email = parsed_email.replace("sshacklensf", "")
+    
+            #incluido no miniproject da licao 12
+            parsed_email = parsed_email.replace("cgermannsf", "")
     
             ### append the text to word_data
             word_data.append(parsed_email)
