@@ -10,20 +10,73 @@ from tester import dump_classifier_and_data
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','salary'] # You will need to use more features
+features_list = ['poi','expenses', 'other', 'deferral_payments', 'salary', 'bonus', 'total_payments', 'total_stock_value', 'long_term_incentive'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
 
+
 ### Task 2: Remove outliers
+del data_dict['TOTAL']
+
+key_max = ""
+max_value = 0
+key_value = 'total_payments'
+
+for key, value in data_dict.items():
+    if value[key_value] != "NaN" and value[key_value] > max_value:
+        max_value = value[key_value]
+        key_max = key
+
+print "key value:", key_value
+print "max value:", max_value
+print "key_max_value:", key_max
+
+
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
+
 my_dataset = data_dict
+
+#from sklearn.decomposition import PCA
+
+#pca = PCA(n_components=1)
+
+#pca.fit(data_PCA)
+
+#print "pca.explained_variance_ratio:", pca.explained_variance_ratio_ 
+
+#first_pc = pca.components_[0]
+#second_pc = pca.components_[1]
+
+#transformed_data = pca.transform(data_PCA)
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
+
+
 labels, features = targetFeatureSplit(data)
+
+import matplotlib.pyplot
+
+max_value = 0;
+key = ""
+
+for point in data:
+    x = point[2]
+    y = point[7]
+    matplotlib.pyplot.scatter( x, y )
+
+    if y > max_value:
+        max_value = y
+        
+
+#print "max value:", max_value,
+
+matplotlib.pyplot.xlabel("salary")
+matplotlib.pyplot.ylabel("long_term_incentive")
+matplotlib.pyplot.show()
 
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
@@ -32,8 +85,24 @@ labels, features = targetFeatureSplit(data)
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-from sklearn.naive_bayes import GaussianNB
-clf = GaussianNB()
+#from sklearn.naive_bayes import GaussianNB
+#clf = GaussianNB()
+
+#from sklearn.svm import SVC
+#clf = SVC(kernel="linear")
+#clf = SVC(C=10000, kernel="rbf")
+
+from sklearn import tree
+clf = tree.DecisionTreeClassifier(min_samples_split=10)
+
+#from sklearn.neighbors import KNeighborsClassifier
+#clf = KNeighborsClassifier(n_neighbors=3)
+
+#from sklearn.ensemble import RandomForestClassifier
+#clf = RandomForestClassifier(n_estimators=10)
+
+#from sklearn.ensemble import AdaBoostClassifier
+#clf = AdaBoostClassifier(n_estimators=100)
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -46,6 +115,12 @@ clf = GaussianNB()
 from sklearn.cross_validation import train_test_split
 features_train, features_test, labels_train, labels_test = \
     train_test_split(features, labels, test_size=0.3, random_state=42)
+
+clf.fit(features_train, labels_train)
+pred = clf.predict(features_test)
+
+from sklearn.metrics import accuracy_score
+print accuracy_score(pred, labels_test)
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
